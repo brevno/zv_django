@@ -13,6 +13,14 @@ class IndexViewWithAverage(generic.ListView):
         return data
 
 
+class ViewWithCancelButtonMixin(object):
+    def post(self, request, *args, **kwargs):
+        if 'cancel' in request.POST:
+            return HttpResponseRedirect(self.success_url)
+        else:
+            return super(ViewWithCancelButtonMixin, self).post(request, *args, **kwargs)
+
+
 class IndexView(IndexViewWithAverage):
     template_name = 'students/students.html'
     context_object_name = 'students'
@@ -28,18 +36,11 @@ class CoursesView(IndexViewWithAverage):
     def get_queryset(self):
         return Course.objects.all()
 
-
-class AddStudentView(generic.CreateView):
+class AddStudentView(ViewWithCancelButtonMixin, generic.CreateView):
     template_name = 'students/add_student.html'
     model = Student
     success_url = reverse_lazy('students')
     fields = ['name']
-
-    def post(self, request, *args, **kwargs):
-        if 'cancel' in request.POST:
-            return HttpResponseRedirect(self.success_url)
-        else:
-            return super(AddStudentView, self).post(request, *args, **kwargs)
 
 
 class DeleteStudentView(generic.DeleteView):
@@ -47,17 +48,11 @@ class DeleteStudentView(generic.DeleteView):
     success_url = reverse_lazy('students')
 
 
-class AddCourseView(generic.CreateView):
+class AddCourseView(ViewWithCancelButtonMixin, generic.CreateView):
     template_name = 'students/add_course.html'
     model = Course
     success_url = reverse_lazy('courses')
     fields = ['name']
-
-    def post(self, request, *args, **kwargs):
-        if 'cancel' in request.POST:
-            return HttpResponseRedirect(self.success_url)
-        else:
-            return super(AddCourseView, self).post(request, *args, **kwargs)
 
 
 class DeleteCourseView(generic.DeleteView):
@@ -65,7 +60,7 @@ class DeleteCourseView(generic.DeleteView):
     success_url = reverse_lazy('courses')
 
 
-class EditRatesView(generic.FormView):
+class EditRatesView(ViewWithCancelButtonMixin, generic.FormView):
     template_name = 'students/edit_rates.html'
     form_class = StudentRatesEditForm
     success_url = reverse_lazy('students')
@@ -81,9 +76,3 @@ class EditRatesView(generic.FormView):
         rating.save()
 
         return super(EditRatesView, self).form_valid(form)
-
-    def post(self, request, *args, **kwargs):
-        if 'cancel' in request.POST:
-            return HttpResponseRedirect(self.success_url)
-        else:
-            return super(EditRatesView, self).post(request, *args, **kwargs)
