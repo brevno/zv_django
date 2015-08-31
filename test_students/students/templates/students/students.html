@@ -1,0 +1,25 @@
+{% extends "students/base.html" %}
+{% block activepage %}students{% endblock %}
+
+{% block content %}
+<a href="{% url 'add_student' %}">Add student...</a>
+{% for student in students %}
+    <div class="well well-sm">
+        {{ student.name }}
+        <ul>
+            {% for rating in student.rating_set.all %}
+            <li>{{ rating.course.name }}: {{ rating.rate }}</li>
+            {% endfor %}
+        </ul>
+        {% if student.rating_set.count %}
+            <p>Average rate: {{ student.average_rate }}</p>
+        {% endif %}
+        <a href="{% url 'edit_rates' student.id %}" class="btn btn-link">edit rates</a>
+        <form method="post" action="{% url 'delete_student' student.id %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-link" value="delete student">
+        </form>
+    </div>
+{% endfor %}
+<p>Total Average: {{ total_average }}</p>
+{% endblock %}

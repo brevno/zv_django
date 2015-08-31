@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <title></title>
+</head>
+<body>
+
+</body>
+    <div class="container">
+        <div class="navbar navbar-default">
+            <ul class="nav navbar-nav">
+                <li id="navitem-students"><a href="{% url 'students' %}">Students</a></li>
+                <li id="navitem-courses"><a href="{% url 'courses' %}">Courses</a></li>
+                <script language="JavaScript">
+                document.getElementById("navitem-{% block activepage %}{% endblock %}").className = "active"
+                </script>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="span12">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+    </div>
+
+</html>

@@ -1,0 +1,21 @@
+{% extends "students/base.html" %}
+{% block activepage %}courses{% endblock %}
+
+{% block content %}
+<a href="{% url 'add_course' %}">Add course...</a>
+{% for course in courses %}
+    <div class="well well-sm">
+        {{ course.name }}
+        {% if course.rating_set.count %}
+            <p>Average rate: {{ course.average_rate }}</p>
+        {% endif %}
+
+        <form method="post" action="{% url 'delete_course' course.id %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-link" value="delete course">
+        </form>
+    </div>
+{% endfor %}
+<p>Total Average: {{ total_average }}</p>
+
+{% endblock %}
