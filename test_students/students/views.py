@@ -81,3 +81,9 @@ class EditRatesView(generic.FormView):
         rating.save()
 
         return super(EditRatesView, self).form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        if 'cancel' in request.POST:
+            return HttpResponseRedirect(self.success_url)
+        else:
+            return super(EditRatesView, self).post(request, *args, **kwargs)
